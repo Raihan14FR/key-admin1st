@@ -158,9 +158,51 @@ tbody tr:nth-child(even) {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    body {
-        padding: 1rem;
+    /* Ganti display table menjadi block */
+    table {
+        display: block;
+        width: 100% !important;
+        overflow-x: hidden; /* Hilangkan scroll horizontal */
+        white-space: normal; /* Kembalikan ke normal */
     }
+
+    thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    tr {
+        margin-bottom: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 0.5rem;
+    }
+
+       td {
+        /* Buat cell seperti card */
+        border: none !important;
+        position: relative;
+        padding-left: 40% !important; /* Ruang untuk label */
+        min-height: 2rem;
+    }
+    
+    td:before {
+        /* Tambahkan label untuk setiap cell */
+        position: absolute;
+        left: 0.5rem;
+        top: 0.5rem;
+        width: 35%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        content: attr(data-label);
+    }
+}
     
     .container {
         padding: 1.5rem;
