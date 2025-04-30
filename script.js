@@ -155,3 +155,25 @@ const data = [
         noResultsMsg.style.display = 'none';
     }
 });
+
+// Saat memuat data atau setelah render tabel
+function addMobileLabels() {
+    if (window.innerWidth <= 768px) {
+        const headers = document.querySelectorAll('th');
+        const cells = document.querySelectorAll('td');
+        
+        headers.forEach((header, index) => {
+            cells.forEach(cell => {
+                if (cell.cellIndex === index) {
+                    cell.setAttribute('data-label', header.textContent.replace(/↵/g, '').trim());
+                }
+            });
+        });
+    }
+}
+
+// Panggil fungsi ini setelah tabel diisi
+addMobileLabels();
+
+// Dan saat window di-resize
+window.addEventListener('resize', addMobileLabels);
