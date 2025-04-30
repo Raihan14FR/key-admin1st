@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Pintu Lantai 1</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-door-open"></i> Data Pintu - Box Kunci [Box 1]</h1>
+    <div class="search-container">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Cari Ruangan..." />
+    </div>
+    <div class="table-container">
+      <table id="doorTable">
+        <thead>
+          <tr>
+            <th>No <i class="fas fa-sort"></i></th>
+            <th>Building <i class="fas fa-sort"></i></th>
+            <th>Room <i class="fas fa-sort"></i></th>
+            <th>Qty <i class="fas fa-sort"></i></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+      </table>
+      <div class="no-results-message" id="noResultsMessage">
+        <i class="fas fa-search-minus"></i>
+        <p>Data tidak ditemukan</p>
+      </div>
+    </div>
+    <p class="footer"><i class="far fa-copyright"></i> 2025 <span class="prime">[PRIME]</span> Data Center Solutions. All rights reserved.</p>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
