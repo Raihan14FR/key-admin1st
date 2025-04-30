@@ -106,93 +106,52 @@ const data = [
     { no: 105, building: "Admin Lt.2", room: "NETWORK OPERATION CENTER (NOC)", qty: "3" },
 ];
   
-function renderTable(dataToRender) {
+  function renderTable(filteredData) {
     const tableBody = document.getElementById("tableBody");
-    const noResultsMsg = document.getElementById('noResultsMessage');
-    
     tableBody.innerHTML = "";
+    filteredData.forEach((item) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${item.no}</td>
+        <td>${item.building}</td>
+        <td>${item.room}</td>
+        <td>${item.qty}</td>
+      `;
+      tableBody.appendChild(row);
+    });
+  }
+  
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const searchTerm = this.value.toLowerCase();
+    const filtered = data.filter(
+      (d) =>
+        d.room.toLowerCase().includes(searchTerm) ||
+        d.building.toLowerCase().includes(searchTerm)
+    );
+    renderTable(filtered);
+  });
+  
+  renderTable(data);
+
+  document.getElementById('searchInput').addEventListener('input', function() {
+    const searchValue = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#tableBody tr');
+    let hasResults = false;
     
-    if (dataToRender.length === 0) {
-        noResultsMsg.style.display = 'block';
-        return;
-    }
-    
-    noResultsMsg.style.display = 'none';
-    
-    dataToRender.forEach((item) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td data-label="No">${item.no}</td>
-            <td data-label="Building">${item.building}</td>
-            <td data-label="Room">${item.room}</td>
-            <td data-label="Qty">${item.qty}</td>
-        `;
-        tableBody.appendChild(row);
+    rows.forEach(row => {
+        const roomName = row.cells[2].textContent.toLowerCase(); // Kolom Room
+        const buildingName = row.cells[1].textContent.toLowerCase(); // Kolom Building
+        const shouldShow = roomName.includes(searchValue) || buildingName.includes(searchValue);
+        
+        row.style.display = shouldShow ? '' : 'none';
+        if (shouldShow) hasResults = true;
     });
     
-    // Pastikan label mobile terupdate
-    updateMobileLabels();
-}
-
-// Fungsi untuk update label di mobile
-function updateMobileLabels() {
-    if (window.innerWidth <= 768px) {
-        document.querySelectorAll('td').forEach(td => {
-            const label = td.getAttribute('data-label');
-            if (label) {
-                td.setAttribute('data-label', label);
-            }
-        });
-    }
-}
-
-// Fungsi pencarian yang dioptimalkan
-function handleSearch() {
-    const searchTerm = this.value.toLowerCase().trim();
-    const filtered = data.filter(item => 
-        item.room.toLowerCase().includes(searchTerm) ||
-        item.building.toLowerCase().includes(searchTerm) ||
-        item.no.toString().includes(searchTerm)
-    );
-    
-    renderTable(filtered);
-    
-    // Update tampilan untuk mobile
-    if (window.innerWidth <= 768px) {
-        const visibleRows = document.querySelectorAll('#tableBody tr:not([style*="display: none"])');
-        const noResultsMsg = document.getElementById('noResultsMessage');
-        noResultsMsg.style.display = (filtered.length === 0 && searchTerm.length > 0) ? 'block' : 'none';
-    }
-}
-
-// Inisialisasi
-document.addEventListener('DOMContentLoaded', () => {
-    // Render data awal
-    renderTable(data);
-    
-    // Setup event listener untuk search
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', handleSearch);
-    
-    // Handle resize untuk mobile
-    window.addEventListener('resize', updateMobileLabels);
-    
-    // Cek jika ada hash URL untuk search langsung
-    if (window.location.hash) {
-        const searchTerm = window.location.hash.substring(1);
-        searchInput.value = decodeURIComponent(searchTerm);
-        handleSearch.call(searchInput);
+    // Toggle pesan "Data tidak ditemukan"
+    const noResultsMsg = document.getElementById('noResultsMessage');
+    if (!hasResults && searchValue.length > 0) {
+        noResultsMsg.style.display = 'block';
+    } else {
+        noResultsMsg.style.display = 'none';
     }
 });
-
-// Fungsi tambahan untuk membantu debugging di mobile
-function logMobileView() {
-    if (window.innerWidth <= 768px) {
-        console.log('Mobile view detected');
-        console.log('Data count:', data.length);
-        console.log('Rendered rows:', document.querySelectorAll('#tableBody tr').length);
-    }
-}
-
-// Panggil fungsi logging
-setTimeout(logMobileView, 1000);
